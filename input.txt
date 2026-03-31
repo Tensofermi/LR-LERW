@@ -1,0 +1,15 @@
+//----- Model_Parameters
+D           1       
+sigma       0.5
+L           2048
+
+
+//----- Simulation_Parameters
+Seed        987654321           
+N_Measure   1                                           
+N_Each      200   
+N_Therm     0                                           
+N_Total     200000                                           
+NBlock      20                                  
+MaxNBin     1000000                                
+NperBin     1                     
