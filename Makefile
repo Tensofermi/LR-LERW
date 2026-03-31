@@ -2,8 +2,8 @@
 TARGET := a.out
 
 # 定义目录
-# SRC_DIR := 1d/src
-SRC_DIR := 2d/src
+SRC_DIR := 1d/src
+# SRC_DIR := 2d/src
 # SRC_DIR := 3d/src
 # SRC_DIR := 4d/src
 # SRC_DIR := 5d/src
