@@ -23,8 +23,8 @@ public:
     int L_max;
     int Dim;
     double Sigma;
-    std::array<double, 2> string_head; // Range for the random walk
-    std::vector<std::array<double, 2>> string;
+    std::array<int, 2> string_head; // Lattice coordinate of the walk head
+    std::vector<std::array<int, 2>> string;
     int length_string;
     int complete_length_string; // Total length of the random walk
 

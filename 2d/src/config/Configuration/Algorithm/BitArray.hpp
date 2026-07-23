@@ -3,30 +3,31 @@
 #include <vector>
 #include <cstddef>
 #include <cassert>
+#include <stdexcept>
 
 class BitArray
 {
 public:
     static const size_t BITS_PER_UNIT = sizeof(unsigned int) * 8;
-    static const size_t SHIFT = __builtin_ctz(BITS_PER_UNIT); // Computes the number of trailing zeros in BITS_PER_UNIT
-    static const unsigned int MASK = BITS_PER_UNIT - 1;
-
     BitArray(size_t size)
-        : m_bits((size + BITS_PER_UNIT - 1) >> SHIFT, 0) {} // Use bit shift for size calculation
+        : m_bits((size + BITS_PER_UNIT - 1) / BITS_PER_UNIT, 0), m_size(size) {}
 
     void initialize(size_t size)
     {
-        m_bits.resize((size + BITS_PER_UNIT - 1) >> SHIFT, 0);
+        m_bits.assign((size + BITS_PER_UNIT - 1) / BITS_PER_UNIT, 0);
+        m_size = size;
     }
 
     void set(size_t index)
     {
-        m_bits[index >> SHIFT] |= (1U << (index & MASK));
+        if (index >= m_size) throw std::out_of_range("BitArray::set");
+        m_bits[index / BITS_PER_UNIT] |= (1U << (index % BITS_PER_UNIT));
     }
 
     void reset(size_t index)
     {
-        m_bits[index >> SHIFT] &= ~(1U << (index & MASK));
+        if (index >= m_size) throw std::out_of_range("BitArray::reset");
+        m_bits[index / BITS_PER_UNIT] &= ~(1U << (index % BITS_PER_UNIT));
     }
 
     void resetAll()
@@ -36,7 +37,8 @@ public:
 
     bool test(size_t index) const
     {
-        return (m_bits[index >> SHIFT] & (1U << (index & MASK))) != 0;
+        if (index >= m_size) throw std::out_of_range("BitArray::test");
+        return (m_bits[index / BITS_PER_UNIT] & (1U << (index % BITS_PER_UNIT))) != 0;
     }
 
     size_t memorySize() const
@@ -46,6 +48,7 @@ public:
 
 private:
     std::vector<unsigned int> m_bits;
+    size_t m_size;
 };
 
 

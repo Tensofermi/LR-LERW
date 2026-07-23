@@ -1,0 +1,18 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        src_dir: [1d/src, 2d/src, 3d/src, 4d/src, 5d/src]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: make -j2 SRC_DIR=${{ matrix.src_dir }} BUILD_DIR=build-${{ strategy.job-index }} BIN_DIR=bin-${{ strategy.job-index }}
+      - name: Run regression tests
+        run: make test SRC_DIR=${{ matrix.src_dir }} BUILD_DIR=build-${{ strategy.job-index }} BIN_DIR=bin-${{ strategy.job-index }}

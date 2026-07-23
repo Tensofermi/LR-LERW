@@ -70,8 +70,9 @@ void Configuration::LERW_v2()
             // If the position has been visited, remove the last position from the string
             while (string_head != string[length_string])
             {
+                const std::array<int, 2> removed = string.back();
+                visited_bit.reset(coordToIndex(removed[0], removed[1], L_max + 1));
                 string.pop_back();
-                visited_bit.reset(coordToIndex(string[length_string][0], string[length_string][1], L_max + 1)); // Mark the position as unvisited
                 length_string--;
 
                 // std::cout << "Backtracking to: (" 

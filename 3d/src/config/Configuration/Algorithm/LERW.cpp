@@ -74,8 +74,8 @@ void Configuration::LERW()
              // If the position has been visited, remove the last position from the string
             while (string_head != string[length_string])
             {
+                visited.erase(string.back());
                 string.pop_back();
-                visited.erase(string[length_string]);
                 length_string--;
             }
             // Reset the string head to the last position

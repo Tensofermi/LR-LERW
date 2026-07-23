@@ -1,8 +1,9 @@
 # 设置最终目标文件名
 TARGET := a.out
+TEST_TARGET := common_tests
 
 # 定义目录
-SRC_DIR := 1d/src
+SRC_DIR ?= 1d/src
 # SRC_DIR := 2d/src
 # SRC_DIR := 3d/src
 # SRC_DIR := 4d/src
@@ -11,7 +12,7 @@ BIN_DIR := bin
 BUILD_DIR := build
 
 # 查找所有源代码文件（.cpp）
-SRC := $(shell find $(SRC_DIR) -type f -name *.cpp)
+SRC := $(shell find $(SRC_DIR) -type f -name '*.cpp')
 
 # 定义目标文件路径，源文件 (.cpp) 转换为目标文件 (.o)
 OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
@@ -60,10 +61,18 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<  
 
+.PHONY: test
+test: $(BIN_DIR)/$(TEST_TARGET)
+	$(BIN_DIR)/$(TEST_TARGET)
+
+$(BIN_DIR)/$(TEST_TARGET): tests/test_common.cpp $(SRC_DIR)/system/RandomNumGen/RandomNumGen.cpp
+	@mkdir -p $(@D)
+	$(CXX) -std=c++11 -Wall -pedantic-errors -I$(SRC_DIR) $^ -o $@
+
 
 .PHONY: clean
 clean:
-	$(RM) -rf $(BUILD_DIR)/* $(BIN_DIR)/$(TARGET) $(BUILD_DIR) $(BIN_DIR)  # 删除构建目录和可执行文件
+	$(RM) -rf $(BUILD_DIR)/* $(BIN_DIR)/$(TARGET) $(BIN_DIR)/$(TEST_TARGET) $(BUILD_DIR) $(BIN_DIR)
 
 
 -include $(DEP)
